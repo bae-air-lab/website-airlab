@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery - AIR Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { gold: '#ba9731', navlight: '#DBE9F4' } } }
+    }
+  </script>
+  <style>
+    .theme-transition { transition: background-color 0.3s, color 0.3s; }
+    .dropdown-enter { animation: dropIn 0.15s ease-out; }
+    @keyframes dropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+    .loader { border-top-color: #6b7280; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Masonry via CSS columns */
+    .masonry { column-gap: 16px; }
+    @media (max-width: 749px)  { .masonry { column-count: 1; } }
+    @media (min-width: 750px) and (max-width: 899px)  { .masonry { column-count: 2; } }
+    @media (min-width: 900px) and (max-width: 1199px) { .masonry { column-count: 3; } }
+    @media (min-width: 1200px) { .masonry { column-count: 4; } }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+    }
+
+    /* Blur-up placeholder */
+    .img-wrapper img {
+      transition: opacity 0.5s ease, transform 0.7s ease;
+    }
+    .img-wrapper img.loading { opacity: 0; }
+    .img-wrapper img.loaded { opacity: 1; }
+    .img-wrapper:hover img.loaded { transform: scale(1.1); }
+
+    /* Lightbox transitions */
+    .lightbox { animation: fadeIn 0.2s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body class="m-0 p-0">
+
+  <!-- ==================== DESKTOP NAVBAR ==================== -->
+  <nav id="desktop-nav"
+    class="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-50
+           bg-navlight text-black rounded-full py-3 px-7
+           items-center space-x-6 shadow-lg theme-transition">
+    <div class="w-12 h-6 relative overflow-hidden flex-shrink-0">
+      <a href="index.html"><img id="desktop-logo" src="logo_black.png" alt="AIR Lab Logo" class="w-full h-full object-cover" /></a>
+    </div>
+    <div class="flex items-center space-x-8 pl-12">
+      <a href="teams.html" class="hover:text-gray-600 transition">Teams</a>
+      <a href="gallery.html" class="hover:text-gray-600 transition">Gallery</a>
+      <a href="news.html" class="hover:text-gray-600 transition">News</a>
+      <div class="relative" id="desktop-dropdown-wrapper">
+        <button type="button" id="desktop-dropdown-btn" class="flex items-center cursor-pointer gap-1 hover:text-gray-600 transition focus:outline-none">
+          Research
+          <svg id="desktop-chevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="desktop-dropdown" class="hidden dropdown-enter absolute left-0 mt-4 w-56 rounded-xl bg-navlight text-black shadow-xl border border-gray-800 overflow-hidden">
+          <a href="publications.html" class="block px-5 py-3 hover:bg-gray-100 transition">Publications</a>
+          <a href="patents.html" class="block px-5 py-3 hover:bg-gray-100 transition">Patents</a>
+          <a href="projects.html" class="block px-5 py-3 hover:bg-gray-100 transition">Projects</a>
+          <a href="acknowledgement.html" class="block px-5 py-3 hover:bg-gray-100 transition">Acknowledgements</a>
+          <a href="opportunities.html" class="block px-5 py-3 hover:bg-gray-100 transition">Opportunities</a>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 5.44-1.54 5.44-7A5.44 5.44 0 0 0 19 4.77 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-7 0C5.27.65 4.09 1 4.09 1A5.07 5.07 0 0 0 4 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 2.3 6.61 5.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg></a>
+      </div>
+      <button id="theme-toggle-desktop" class="cursor-pointer" aria-label="Toggle theme">
+        <svg id="sun-icon-desktop" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg id="moon-icon-desktop" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MOBILE NAVBAR ==================== -->
+  <nav id="mobile-nav"
+    class="md:hidden fixed top-4 left-4 right-4 z-50
+           bg-navlight text-black rounded-full py-3 px-5
+           flex items-center justify-between shadow-lg theme-transition">
+    <div class="w-10 h-5 relative overflow-hidden">
+      <a href="index.html"><img id="mobile-logo" src="logo_black.png" alt="AIR Lab Logo" class="w-full h-full object-cover" /></a>
+    </div>
+    <button type="button" id="mobile-menu-btn" class="mobile-menu-button cursor-pointer p-1" aria-label="Toggle menu">
+      <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden fixed top-20 left-4 right-4 z-40 bg-navlight text-black rounded-2xl py-4 shadow-lg border border-gray-800 theme-transition">
+    <div class="flex flex-col space-y-1">
+      <a href="teams.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">Teams</a>
+      <a href="gallery.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">Gallery</a>
+      <a href="news.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">News</a>
+      <div>
+        <button type="button" id="mobile-research-btn" class="w-full text-left px-5 py-3 flex items-center justify-between hover:bg-gray-100 transition">
+          Research <svg id="mobile-chevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="mobile-research-links" class="hidden pl-4">
+          <a href="publications.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Publications</a>
+          <a href="patents.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Patents</a>
+          <a href="projects.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Projects</a>
+          <a href="acknowledgement.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Acknowledgements</a>
+          <a href="opportunities.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Opportunities</a>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 px-5 py-3">
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 5.44-1.54 5.44-7A5.44 5.44 0 0 0 19 4.77 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-7 0C5.27.65 4.09 1 4.09 1A5.07 5.07 0 0 0 4 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 2.3 6.61 5.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg></a>
+        <button type="button" id="theme-toggle-mobile" class="border border-gray-600 p-1 rounded-md ml-auto" aria-label="Toggle theme">
+          <svg id="sun-icon-mobile" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="moon-icon-mobile" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <div id="page-wrapper" class="min-h-screen bg-black py-12 pt-24 md:py-20 theme-transition">
+    <div class="max-w-7xl mx-auto px-6 mt-12">
+
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <p class="mt-4 text-xl text-white opacity-80" id="gallery-subtitle">
+          <span class="text-gold">Moments from AIR Lab</span> - Research, Robots, and Team
+        </p>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading-state" class="flex items-center justify-center py-20">
+        <div class="loader border-t-2 rounded-full border-gray-500 bg-gray-300 w-8 h-8"></div>
+      </div>
+
+      <!-- Error -->
+      <div id="error-state" class="hidden flex items-center justify-center py-20">
+        <p class="text-xl text-white opacity-70" id="error-message"></p>
+      </div>
+
+      <!-- Masonry Grid -->
+      <div id="masonry-grid" class="hidden masonry"></div>
+
+      <!-- Infinite Scroll Loader -->
+      <div id="scroll-loader" class="hidden flex justify-center py-12">
+        <div class="w-12 h-12 border-4 border-t-transparent border-blue-600 rounded-full animate-spin"></div>
+      </div>
+
+      <!-- End Message -->
+      <div id="end-message" class="hidden text-center py-12">
+        <p class="text-white opacity-70 text-lg" id="end-text">That's all for now.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LIGHTBOX ==================== -->
+  <div id="lightbox" class="hidden fixed inset-0 z-[60] bg-black/95 flex items-center justify-center lightbox">
+    <!-- Close -->
+    <button id="lb-close" class="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition" aria-label="Close">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <!-- Prev -->
+    <button id="lb-prev" class="absolute left-4 z-50 p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition" aria-label="Previous">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <!-- Next -->
+    <button id="lb-next" class="absolute right-4 z-50 p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition" aria-label="Next">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <!-- Counter -->
+    <div id="lb-counter" class="absolute top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-2 rounded-full bg-white/10 backdrop-blur text-white text-sm font-medium"></div>
+    <!-- Image -->
+    <div class="relative max-w-[95vw] max-h-[90vh]" id="lb-image-wrapper">
+      <img id="lb-image" src="" alt="AIR Lab Gallery Fullscreen" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" />
+    </div>
+  </div>
+
+  <!-- ==================== LOGIC ==================== -->
+  <script type="module">
+    // ═══════════════════════════════════════════════════
+    // ▶▶▶  REPLACE THESE WITH YOUR GITHUB DETAILS  ◀◀◀
+    // ═══════════════════════════════════════════════════
+    const GITHUB_OWNER = 'bae-air-lab';   // e.g. 'airlab-ncsu'
+    const GITHUB_REPO  = 'website-airlab';         // e.g. 'airlab-website'
+    const GITHUB_BRANCH = 'main';                  // or 'gh-pages' if using that branch
+    // ═══════════════════════════════════════════════════
+
+    const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.avif'];
+    const ITEMS_PER_PAGE = 12;
+
+    let allImages = [];
+    let displayedCount = 0;
+    let hasMore = true;
+    let lightboxOpen = false;
+    let currentIndex = 0;
+
+    // ── Theme ──
+    let isDarkMode = false;
+
+    function applyTheme() {
+      const wrapper = document.getElementById('page-wrapper');
+      wrapper.classList.remove('bg-black', 'bg-white');
+      wrapper.classList.add(isDarkMode ? 'bg-white' : 'bg-black');
+
+      // Subtitle text
+      const sub = document.getElementById('gallery-subtitle');
+      sub.classList.remove('text-white', 'text-black');
+      sub.classList.add(isDarkMode ? 'text-black' : 'text-white');
+
+      // Error & end text
+      ['error-message', 'end-text'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('text-white', 'text-black'); el.classList.add(isDarkMode ? 'text-black' : 'text-white'); }
+      });
+
+      const navClasses = isDarkMode
+        ? { bg: 'bg-black', text: 'text-white', shadow: 'shadow-md', logo: 'logo_white.png' }
+        : { bg: 'bg-navlight', text: 'text-black', shadow: 'shadow-lg', logo: 'logo_black.png' };
+
+      ['desktop-nav', 'mobile-nav', 'mobile-menu'].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove('bg-navlight', 'bg-black', 'text-black', 'text-white', 'shadow-lg', 'shadow-md');
+        el.classList.add(navClasses.bg, navClasses.text, navClasses.shadow);
+      });
+      const dd = document.getElementById('desktop-dropdown');
+      dd.classList.remove('bg-navlight', 'bg-black', 'text-black', 'text-white');
+      dd.classList.add(navClasses.bg, navClasses.text);
+
+      document.getElementById('desktop-logo').src = navClasses.logo;
+      document.getElementById('mobile-logo').src = navClasses.logo;
+      document.getElementById('sun-icon-desktop').classList.toggle('hidden', !isDarkMode);
+      document.getElementById('moon-icon-desktop').classList.toggle('hidden', isDarkMode);
+      document.getElementById('sun-icon-mobile').classList.toggle('hidden', !isDarkMode);
+      document.getElementById('moon-icon-mobile').classList.toggle('hidden', isDarkMode);
+    }
+
+    function toggleTheme() { isDarkMode = !isDarkMode; applyTheme(); }
+    document.getElementById('theme-toggle-desktop').addEventListener('click', toggleTheme);
+    document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
+
+    // ── Navbar interactions ──
+    const ddBtn = document.getElementById('desktop-dropdown-btn');
+    const ddEl = document.getElementById('desktop-dropdown');
+    const ddChevron = document.getElementById('desktop-chevron');
+    ddBtn.addEventListener('click', () => { const o = !ddEl.classList.contains('hidden'); ddEl.classList.toggle('hidden'); ddChevron.classList.toggle('rotate-180', !o); });
+    document.addEventListener('pointerdown', (e) => { if (!document.getElementById('desktop-dropdown-wrapper').contains(e.target)) { ddEl.classList.add('hidden'); ddChevron.classList.remove('rotate-180'); } });
+
+    let mobileOpen = false;
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+    function setMobileMenu(o) { mobileOpen=o; mobileMenu.classList.toggle('hidden',!o); menuIcon.classList.toggle('hidden',o); closeIcon.classList.toggle('hidden',!o); if(!o){document.getElementById('mobile-research-links').classList.add('hidden');document.getElementById('mobile-chevron').classList.remove('rotate-180');} }
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => setMobileMenu(!mobileOpen));
+    document.getElementById('mobile-research-btn').addEventListener('click', () => {
+      const rl = document.getElementById('mobile-research-links'); const o = rl.classList.contains('hidden');
+      rl.classList.toggle('hidden',!o); document.getElementById('mobile-chevron').classList.toggle('rotate-180',o);
+    });
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => setMobileMenu(false)));
+    document.addEventListener('pointerdown', (e) => { if (mobileOpen && !mobileMenu.contains(e.target) && !e.target.closest('.mobile-menu-button')) setMobileMenu(false); });
+
+    // ── Zoom icon SVG ──
+    const zoomSvg = `<svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>`;
+
+    // ── Render batch into masonry ──
+    function renderBatch(startIndex, count) {
+      const grid = document.getElementById('masonry-grid');
+      const end = Math.min(startIndex + count, allImages.length);
+
+      for (let i = startIndex; i < end; i++) {
+        const img = allImages[i];
+        const item = document.createElement('div');
+        item.className = 'masonry-item';
+        item.innerHTML = `
+          <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer img-wrapper" data-index="${i}">
+            <img src="images/gallery/${img}" alt="AIR Lab Gallery"
+                 class="w-full object-cover rounded-2xl loading"
+                 loading="lazy"
+                 onload="this.classList.remove('loading');this.classList.add('loaded');" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none"></div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="bg-black/60 backdrop-blur-sm rounded-full p-4">${zoomSvg}</div>
+            </div>
+          </div>
+        `;
+
+        // Click → open lightbox
+        item.querySelector('.img-wrapper').addEventListener('click', () => openLightbox(i));
+        grid.appendChild(item);
+      }
+
+      displayedCount = end;
+
+      if (displayedCount >= allImages.length) {
+        hasMore = false;
+        document.getElementById('scroll-loader').classList.add('hidden');
+        if (allImages.length > 0) document.getElementById('end-message').classList.remove('hidden');
+      }
+    }
+
+    // ── Infinite scroll via IntersectionObserver ──
+    function setupInfiniteScroll() {
+      const loader = document.getElementById('scroll-loader');
+      if (!hasMore) return;
+
+      loader.classList.remove('hidden');
+
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          renderBatch(displayedCount, ITEMS_PER_PAGE);
+          if (!hasMore) observer.disconnect();
+        }
+      }, { threshold: 0.1 });
+
+      observer.observe(loader);
+    }
+
+    // ── Lightbox ──
+    function openLightbox(index) {
+      currentIndex = index;
+      lightboxOpen = true;
+      updateLightbox();
+      document.getElementById('lightbox').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightboxOpen = false;
+      document.getElementById('lightbox').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function updateLightbox() {
+      document.getElementById('lb-image').src = `images/gallery/${allImages[currentIndex]}`;
+      document.getElementById('lb-counter').textContent = `${currentIndex + 1} / ${allImages.length}`;
+    }
+
+    function goToPrevious() {
+      currentIndex = currentIndex === 0 ? allImages.length - 1 : currentIndex - 1;
+      updateLightbox();
+    }
+
+    function goToNext() {
+      currentIndex = currentIndex === allImages.length - 1 ? 0 : currentIndex + 1;
+      updateLightbox();
+    }
+
+    document.getElementById('lb-close').addEventListener('click', closeLightbox);
+    document.getElementById('lb-prev').addEventListener('click', (e) => { e.stopPropagation(); goToPrevious(); });
+    document.getElementById('lb-next').addEventListener('click', (e) => { e.stopPropagation(); goToNext(); });
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    });
+    document.getElementById('lb-image-wrapper').addEventListener('click', (e) => e.stopPropagation());
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightboxOpen) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') goToPrevious();
+      if (e.key === 'ArrowRight') goToNext();
+    });
+
+    // ── Fetch images from GitHub API ──
+    async function fetchGalleryImages() {
+      const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/images/gallery?ref=${GITHUB_BRANCH}`;
+
+      try {
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+
+        const files = await res.json();
+
+        if (!Array.isArray(files)) throw new Error('Unexpected response format');
+
+        // Filter to image files only
+        allImages = files
+          .filter(f => f.type === 'file' && IMAGE_EXTENSIONS.some(ext => f.name.toLowerCase().endsWith(ext)))
+          .map(f => f.name);
+
+        if (allImages.length === 0) {
+          throw new Error('No images found in gallery');
+        }
+
+        // Show grid and render first batch
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('masonry-grid').classList.remove('hidden');
+        renderBatch(0, ITEMS_PER_PAGE);
+        setupInfiniteScroll();
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+        document.getElementById('error-message').textContent = err.message || 'Failed to load gallery';
+      }
+    }
+
+    fetchGalleryImages();
+    applyTheme();
+  </script>
+</body>
+</html>

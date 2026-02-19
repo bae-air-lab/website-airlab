@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>News - AIR Lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{gold:'#ba9731',navlight:'#DBE9F4'}}}}</script>
+  <style>
+    .theme-transition{transition:background-color .3s,color .3s}
+    .dropdown-enter{animation:dropIn .15s ease-out}
+    @keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+    .loader{border-top-color:#6b7280;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  </style>
+</head>
+<body class="m-0 p-0">
+
+  <!-- NAVBAR (same shared block) -->
+  <nav id="desktop-nav" class="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-navlight text-black rounded-full py-3 px-7 items-center space-x-6 shadow-lg theme-transition">
+    <div class="w-12 h-6 relative overflow-hidden flex-shrink-0"><a href="index.html"><img id="desktop-logo" src="logo_black.png" alt="AIR Lab Logo" class="w-full h-full object-cover"/></a></div>
+    <div class="flex items-center space-x-8 pl-12">
+      <a href="teams.html" class="hover:text-gray-600 transition">Teams</a>
+      <a href="gallery.html" class="hover:text-gray-600 transition">Gallery</a>
+      <a href="news.html" class="hover:text-gray-600 transition">News</a>
+      <div class="relative" id="desktop-dropdown-wrapper">
+        <button type="button" id="desktop-dropdown-btn" class="flex items-center cursor-pointer gap-1 hover:text-gray-600 transition focus:outline-none">Research<svg id="desktop-chevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+        <div id="desktop-dropdown" class="hidden dropdown-enter absolute left-0 mt-4 w-56 rounded-xl bg-navlight text-black shadow-xl border border-gray-800 overflow-hidden">
+          <a href="publications.html" class="block px-5 py-3 hover:bg-gray-100 transition">Publications</a>
+          <a href="patents.html" class="block px-5 py-3 hover:bg-gray-100 transition">Patents</a>
+          <a href="projects.html" class="block px-5 py-3 hover:bg-gray-100 transition">Projects</a>
+          <a href="acknowledgement.html" class="block px-5 py-3 hover:bg-gray-100 transition">Acknowledgements</a>
+          <a href="opportunities.html" class="block px-5 py-3 hover:bg-gray-100 transition">Opportunities</a>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 5.44-1.54 5.44-7A5.44 5.44 0 0 0 19 4.77 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-7 0C5.27.65 4.09 1 4.09 1A5.07 5.07 0 0 0 4 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 2.3 6.61 5.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg></a>
+      </div>
+      <button id="theme-toggle-desktop" class="cursor-pointer" aria-label="Toggle theme">
+        <svg id="sun-icon-desktop" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg id="moon-icon-desktop" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+  <nav id="mobile-nav" class="md:hidden fixed top-4 left-4 right-4 z-50 bg-navlight text-black rounded-full py-3 px-5 flex items-center justify-between shadow-lg theme-transition">
+    <div class="w-10 h-5 relative overflow-hidden"><a href="index.html"><img id="mobile-logo" src="logo_black.png" alt="AIR Lab Logo" class="w-full h-full object-cover"/></a></div>
+    <button type="button" id="mobile-menu-btn" class="mobile-menu-button cursor-pointer p-1" aria-label="Toggle menu">
+      <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </nav>
+  <div id="mobile-menu" class="hidden md:hidden fixed top-20 left-4 right-4 z-40 bg-navlight text-black rounded-2xl py-4 shadow-lg border border-gray-800 theme-transition">
+    <div class="flex flex-col space-y-1">
+      <a href="teams.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">Teams</a>
+      <a href="gallery.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">Gallery</a>
+      <a href="news.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">News</a>
+      <div>
+        <button type="button" id="mobile-research-btn" class="w-full text-left px-5 py-3 flex items-center justify-between hover:bg-gray-100 transition">Research<svg id="mobile-chevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></button>
+        <div id="mobile-research-links" class="hidden pl-4">
+          <a href="publications.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Publications</a>
+          <a href="patents.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Patents</a>
+          <a href="projects.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Projects</a>
+          <a href="acknowledgement.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Acknowledgements</a>
+          <a href="opportunities.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Opportunities</a>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 px-5 py-3">
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 5.44-1.54 5.44-7A5.44 5.44 0 0 0 19 4.77 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-7 0C5.27.65 4.09 1 4.09 1A5.07 5.07 0 0 0 4 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 2.3 6.61 5.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg></a>
+        <button type="button" id="theme-toggle-mobile" class="border border-gray-600 p-1 rounded-md ml-auto" aria-label="Toggle theme">
+          <svg id="sun-icon-mobile" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="moon-icon-mobile" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="page-wrapper" class="min-h-screen bg-black py-12 pt-24 md:py-20 theme-transition">
+    <div id="loading-state" class="flex items-center justify-center py-40"><div class="loader border-t-2 rounded-full border-gray-500 bg-gray-300 w-8 h-8"></div></div>
+    <div id="error-state" class="hidden flex items-center justify-center text-center py-40"><div class="max-w-md px-6"><p class="text-xl text-red-500 mb-4">Error loading news</p><p class="text-white opacity-80" id="error-message"></p></div></div>
+    <div id="news-content" class="hidden max-w-7xl mx-auto px-6"></div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    const supabase = createClient('https://yyvndryintsrmkqrdnvb.supabase.co','sb_publishable_e3377RLuiVxmKIMW6-jAKA_Zju9KB5Y');
+
+    let isDarkMode = false;
+    const esc = s => { const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; };
+
+    // SVGs
+    const clockSvg = w => `<svg class="w-${w} h-${w}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`;
+    const newspaperSvg = `<svg class="w-16 h-16 opacity-30" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2m2-4h6m-6 4h6m-6 4h4"/></svg>`;
+
+    function applyTheme() {
+      const w = document.getElementById('page-wrapper');
+      w.classList.remove('bg-black','bg-white'); w.classList.add(isDarkMode?'bg-white':'bg-black');
+
+      const nc = isDarkMode
+        ? {bg:'bg-black',text:'text-white',shadow:'shadow-md',logo:'logo_white.png'}
+        : {bg:'bg-navlight',text:'text-black',shadow:'shadow-lg',logo:'logo_black.png'};
+      ['desktop-nav','mobile-nav','mobile-menu'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.classList.remove('bg-navlight','bg-black','text-black','text-white','shadow-lg','shadow-md');
+        el.classList.add(nc.bg,nc.text,nc.shadow);
+      });
+      const dd=document.getElementById('desktop-dropdown');
+      dd.classList.remove('bg-navlight','bg-black','text-black','text-white');
+      dd.classList.add(nc.bg,nc.text);
+      document.getElementById('desktop-logo').src=nc.logo;
+      document.getElementById('mobile-logo').src=nc.logo;
+      document.getElementById('sun-icon-desktop').classList.toggle('hidden',!isDarkMode);
+      document.getElementById('moon-icon-desktop').classList.toggle('hidden',isDarkMode);
+      document.getElementById('sun-icon-mobile').classList.toggle('hidden',!isDarkMode);
+      document.getElementById('moon-icon-mobile').classList.toggle('hidden',isDarkMode);
+
+      if (window._newsData) renderNews(window._newsData);
+    }
+    function toggleTheme(){isDarkMode=!isDarkMode;applyTheme();}
+    document.getElementById('theme-toggle-desktop').addEventListener('click',toggleTheme);
+    document.getElementById('theme-toggle-mobile').addEventListener('click',toggleTheme);
+
+    // Navbar
+    const ddBtn=document.getElementById('desktop-dropdown-btn'),ddEl=document.getElementById('desktop-dropdown'),ddC=document.getElementById('desktop-chevron');
+    ddBtn.addEventListener('click',()=>{const o=!ddEl.classList.contains('hidden');ddEl.classList.toggle('hidden');ddC.classList.toggle('rotate-180',!o);});
+    document.addEventListener('pointerdown',e=>{if(!document.getElementById('desktop-dropdown-wrapper').contains(e.target)){ddEl.classList.add('hidden');ddC.classList.remove('rotate-180');}});
+    let mo=false;const mm=document.getElementById('mobile-menu'),mi=document.getElementById('menu-icon'),ci=document.getElementById('close-icon');
+    function smm(o){mo=o;mm.classList.toggle('hidden',!o);mi.classList.toggle('hidden',o);ci.classList.toggle('hidden',!o);if(!o){document.getElementById('mobile-research-links').classList.add('hidden');document.getElementById('mobile-chevron').classList.remove('rotate-180');}}
+    document.getElementById('mobile-menu-btn').addEventListener('click',()=>smm(!mo));
+    document.getElementById('mobile-research-btn').addEventListener('click',()=>{const r=document.getElementById('mobile-research-links'),o=r.classList.contains('hidden');r.classList.toggle('hidden',!o);document.getElementById('mobile-chevron').classList.toggle('rotate-180',o);});
+    document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>smm(false)));
+    document.addEventListener('pointerdown',e=>{if(mo&&!mm.contains(e.target)&&!e.target.closest('.mobile-menu-button'))smm(false);});
+
+    function renderNews(news) {
+      const container = document.getElementById('news-content');
+      const tc = isDarkMode ? 'text-black' : 'text-white';
+      const ac = isDarkMode ? 'text-gray-800' : 'text-gray-100';
+      const bc = isDarkMode ? 'border-black' : 'border-white/40';
+
+      if (news.length === 0) {
+        container.innerHTML = `
+          <div class="text-center mb-16 pt-12">
+            <p class="text-xl ${tc} opacity-90 max-w-3xl mx-auto"><span class="text-gold">News Updates</span> from AIR Lab and the AI-Robotics Community</p>
+          </div>
+          <div class="text-center py-16 border ${bc} rounded-xl max-w-2xl mx-auto">
+            <div class="relative inline-block mb-6 ${tc}">${newspaperSvg}</div>
+            <h2 class="text-2xl font-bold ${tc} mb-4">No News Yet</h2>
+            <p class="text-lg ${tc} px-4 opacity-80 max-w-md mx-auto">Updates and announcements will appear here. Check back soon for the latest from AIR Lab and AI & Robotics.</p>
+          </div>`;
+        return;
+      }
+
+      const featured = news[0];
+      const others = news.slice(1);
+
+      let othersHtml = others.map(item => `
+        <a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer" class="group block">
+          <div class="flex gap-6 items-start hover:bg-white/5 rounded-2xl p-4 -m-4 transition-all duration-300">
+            <div class="flex-shrink-0">
+              <div class="relative w-32 h-32 rounded-2xl overflow-hidden shadow-lg">
+                ${item.image
+                  ? `<img src="${esc(item.image)}" alt="${esc(item.title)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"/>`
+                  : `<div class="w-full h-full bg-gray-800 flex items-center justify-center"><p class="text-gray-500 text-xs">No image</p></div>`}
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg md:text-xl font-semibold ${tc} line-clamp-3">${esc(item.title)}</h3>
+              <div class="mt-4 flex items-center gap-2 text-sm opacity-70 ${tc}">${clockSvg(4)}<span>${esc(item.reading_time||'?')} minutes</span></div>
+            </div>
+          </div>
+        </a>
+      `).join('');
+
+      container.innerHTML = `
+        <div class="text-center mb-12">
+          <p class="mt-4 text-xl ${tc} opacity-80"><span class="text-gold">Latest News</span> from AIR Lab and the world of AI & Robotics</p>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
+          <div class="lg:col-span-2">
+            <a href="${esc(featured.link)}" target="_blank" rel="noopener noreferrer" class="group block">
+              <div class="relative rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500">
+                ${featured.image
+                  ? `<img src="${esc(featured.image)}" alt="${esc(featured.title)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"/>`
+                  : `<div class="w-full aspect-[3/2] bg-gray-800 flex items-center justify-center"><p class="text-gray-400">Image coming soon</p></div>`}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-8 md:p-12 text-white">
+                  ${featured.category ? `<span class="inline-block px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium mb-4">${esc(featured.category)}</span>` : ''}
+                  <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">${esc(featured.title)}</h2>
+                  <div class="mt-6 flex items-center gap-2 text-white/80">${clockSvg(5)}<span class="text-lg">${esc(featured.reading_time||'?')} minutes</span></div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="space-y-8">${othersHtml}</div>
+        </div>`;
+    }
+
+    async function init() {
+      try {
+        const { data, error } = await supabase.from('news')
+          .select('id,title,category,reading_time,image,link,created_at')
+          .order('created_at',{ascending:false}).order('id',{ascending:false});
+        if (error) throw error;
+        window._newsData = data || [];
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('news-content').classList.remove('hidden');
+        renderNews(window._newsData);
+      } catch(err) {
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+        document.getElementById('error-message').textContent = err.message||'Failed to load news';
+      }
+    }
+    init(); applyTheme();
+  </script>
+</body>
+</html>

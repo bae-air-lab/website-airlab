@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team - AIR Lab</title>
+  <meta name="description" content="Researchers at AIR Lab, NC State University" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { gold: '#ba9731', navlight: '#DBE9F4' } } }
+    }
+  </script>
+  <style>
+    .theme-transition { transition: background-color 0.3s, color 0.3s; }
+    .dropdown-enter { animation: dropIn 0.15s ease-out; }
+    @keyframes dropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+    .card-hover:hover .card-image { transform: scale(1.05); }
+    .card-hover:hover .card-frame { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); transform: translateY(-8px); }
+    .card-image { transition: transform 0.7s; }
+    .card-frame { transition: box-shadow 0.5s, transform 0.5s; }
+    .loader { border-top-color: #6b7280; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="m-0 p-0">
+
+  <!-- ==================== DESKTOP NAVBAR ==================== -->
+  <nav id="desktop-nav"
+    class="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-50
+           bg-navlight text-black rounded-full py-3 px-7
+           items-center space-x-6 shadow-lg theme-transition">
+    <div class="w-12 h-6 relative overflow-hidden flex-shrink-0">
+      <a href="index.html"><img id="desktop-logo" src="logo_black.png" alt="AIR Lab Logo" class="w-full h-full object-cover" /></a>
+    </div>
+    <div class="flex items-center space-x-8 pl-12">
+      <a href="teams.html" class="hover:text-gray-600 transition">Teams</a>
+      <a href="gallery.html" class="hover:text-gray-600 transition">Gallery</a>
+      <a href="news.html" class="hover:text-gray-600 transition">News</a>
+      <div class="relative" id="desktop-dropdown-wrapper">
+        <button type="button" id="desktop-dropdown-btn" class="flex items-center cursor-pointer gap-1 hover:text-gray-600 transition focus:outline-none">
+          Research
+          <svg id="desktop-chevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="desktop-dropdown" class="hidden dropdown-enter absolute left-0 mt-4 w-56 rounded-xl bg-navlight text-black shadow-xl border border-gray-800 overflow-hidden">
+          <a href="publications.html" class="block px-5 py-3 hover:bg-gray-100 transition">Publications</a>
+          <a href="patents.html" class="block px-5 py-3 hover:bg-gray-100 transition">Patents</a>
+          <a href="projects.html" class="block px-5 py-3 hover:bg-gray-100 transition">Projects</a>
+          <a href="acknowledgement.html" class="block px-5 py-3 hover:bg-gray-100 transition">Acknowledgements</a>
+          <a href="opportunities.html" class="block px-5 py-3 hover:bg-gray-100 transition">Opportunities</a>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 5.44-1.54 5.44-7A5.44 5.44 0 0 0 19 4.77 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-7 0C5.27.65 4.09 1 4.09 1A5.07 5.07 0 0 0 4 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 2.3 6.61 5.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg>
+        </a>
+      </div>
+      <button id="theme-toggle-desktop" class="cursor-pointer" aria-label="Toggle theme">
+        <svg id="sun-icon-desktop" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg id="moon-icon-desktop" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MOBILE NAVBAR ==================== -->
+  <nav id="mobile-nav"
+    class="md:hidden fixed top-4 left-4 right-4 z-50
+           bg-navlight text-black rounded-full py-3 px-5
+           flex items-center justify-between shadow-lg theme-transition">
+    <div class="w-10 h-5 relative overflow-hidden">
+      <a href="index.html"><img id="mobile-logo" src="logo_black.png" alt="AIR Lab Logo" class="w-full h-full object-cover" /></a>
+    </div>
+    <button type="button" id="mobile-menu-btn" class="mobile-menu-button cursor-pointer p-1" aria-label="Toggle menu">
+      <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu Panel -->
+  <div id="mobile-menu" class="hidden md:hidden fixed top-20 left-4 right-4 z-40 bg-navlight text-black rounded-2xl py-4 shadow-lg border border-gray-800 theme-transition">
+    <div class="flex flex-col space-y-1">
+      <a href="teams.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">Teams</a>
+      <a href="gallery.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">Gallery</a>
+      <a href="news.html" class="px-5 py-3 hover:bg-gray-100 transition mobile-link">News</a>
+      <div>
+        <button type="button" id="mobile-research-btn" class="w-full text-left px-5 py-3 flex items-center justify-between hover:bg-gray-100 transition">
+          Research
+          <svg id="mobile-chevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div id="mobile-research-links" class="hidden pl-4">
+          <a href="publications.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Publications</a>
+          <a href="patents.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Patents</a>
+          <a href="projects.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Projects</a>
+          <a href="acknowledgement.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Acknowledgements</a>
+          <a href="opportunities.html" class="block px-5 py-3 hover:bg-gray-100 transition mobile-link">Opportunities</a>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3 px-5 py-3">
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="contacts.html" class="border border-gray-600 p-1 rounded-md">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 5.44-1.54 5.44-7A5.44 5.44 0 0 0 19 4.77 5.07 5.07 0 0 0 18.91 1S17.73.65 15 2.48a13.38 13.38 0 0 0-7 0C5.27.65 4.09 1 4.09 1A5.07 5.07 0 0 0 4 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 2.3 6.61 5.44 7A3.37 3.37 0 0 0 7 18.13V22"/></svg>
+        </a>
+        <button type="button" id="theme-toggle-mobile" class="border border-gray-600 p-1 rounded-md ml-auto" aria-label="Toggle theme">
+          <svg id="sun-icon-mobile" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="moon-icon-mobile" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <div id="page-wrapper" class="min-h-screen bg-black pt-24 py-10 md:py-20 theme-transition">
+
+    <!-- Loading Spinner -->
+    <div id="loading-state" class="flex items-center justify-center py-40">
+      <div class="loader border-t-2 rounded-full border-gray-500 bg-gray-300 w-8 h-8"></div>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="hidden flex items-center justify-center py-40">
+      <p class="text-xl text-red-500" id="error-message"></p>
+    </div>
+
+    <!-- Team Members Container -->
+    <div id="team-container" class="hidden max-w-6xl mx-auto px-4 sm:px-6"></div>
+  </div>
+
+  <!-- ==================== SUPABASE + LOGIC ==================== -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    const supabase = createClient(
+      'https://yyvndryintsrmkqrdnvb.supabase.co',
+      'sb_publishable_e3377RLuiVxmKIMW6-jAKA_Zju9KB5Y'
+    );
+
+    // ── Theme ──
+    let isDarkMode = false;
+
+    function applyTheme() {
+      const wrapper = document.getElementById('page-wrapper');
+      wrapper.classList.remove('bg-black', 'bg-white');
+      wrapper.classList.add(isDarkMode ? 'bg-white' : 'bg-black');
+
+      // Navbar
+      const navClasses = isDarkMode
+        ? { bg: 'bg-black', text: 'text-white', shadow: 'shadow-md', logo: 'logo_white.png' }
+        : { bg: 'bg-navlight', text: 'text-black', shadow: 'shadow-lg', logo: 'logo_black.png' };
+
+      ['desktop-nav', 'mobile-nav', 'mobile-menu'].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove('bg-navlight', 'bg-black', 'text-black', 'text-white', 'shadow-lg', 'shadow-md');
+        el.classList.add(navClasses.bg, navClasses.text, navClasses.shadow);
+      });
+
+      const dd = document.getElementById('desktop-dropdown');
+      dd.classList.remove('bg-navlight', 'bg-black', 'text-black', 'text-white');
+      dd.classList.add(navClasses.bg, navClasses.text);
+
+      document.getElementById('desktop-logo').src = navClasses.logo;
+      document.getElementById('mobile-logo').src = navClasses.logo;
+
+      document.getElementById('sun-icon-desktop').classList.toggle('hidden', !isDarkMode);
+      document.getElementById('moon-icon-desktop').classList.toggle('hidden', isDarkMode);
+      document.getElementById('sun-icon-mobile').classList.toggle('hidden', !isDarkMode);
+      document.getElementById('moon-icon-mobile').classList.toggle('hidden', isDarkMode);
+
+      // Re-render team cards with updated theme
+      if (window._teamData) renderTeam(window._teamData);
+    }
+
+    function toggleTheme() { isDarkMode = !isDarkMode; applyTheme(); }
+
+    document.getElementById('theme-toggle-desktop').addEventListener('click', toggleTheme);
+    document.getElementById('theme-toggle-mobile').addEventListener('click', toggleTheme);
+
+    // ── Navbar interactions ──
+    const ddBtn = document.getElementById('desktop-dropdown-btn');
+    const dd = document.getElementById('desktop-dropdown');
+    const ddChevron = document.getElementById('desktop-chevron');
+    ddBtn.addEventListener('click', () => {
+      const isOpen = !dd.classList.contains('hidden');
+      dd.classList.toggle('hidden'); ddChevron.classList.toggle('rotate-180', !isOpen);
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (!document.getElementById('desktop-dropdown-wrapper').contains(e.target)) {
+        dd.classList.add('hidden'); ddChevron.classList.remove('rotate-180');
+      }
+    });
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+    const mobileResearchBtn = document.getElementById('mobile-research-btn');
+    const mobileResearchLinks = document.getElementById('mobile-research-links');
+    const mobileChevron = document.getElementById('mobile-chevron');
+    let mobileOpen = false;
+
+    function setMobileMenu(open) {
+      mobileOpen = open;
+      mobileMenu.classList.toggle('hidden', !open);
+      menuIcon.classList.toggle('hidden', open);
+      closeIcon.classList.toggle('hidden', !open);
+      if (!open) { mobileResearchLinks.classList.add('hidden'); mobileChevron.classList.remove('rotate-180'); }
+    }
+    mobileMenuBtn.addEventListener('click', () => setMobileMenu(!mobileOpen));
+    mobileResearchBtn.addEventListener('click', () => {
+      const open = mobileResearchLinks.classList.contains('hidden');
+      mobileResearchLinks.classList.toggle('hidden', !open);
+      mobileChevron.classList.toggle('rotate-180', open);
+    });
+    document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => setMobileMenu(false)));
+    document.addEventListener('pointerdown', (e) => {
+      if (mobileOpen && !mobileMenu.contains(e.target) && !e.target.closest('.mobile-menu-button')) setMobileMenu(false);
+    });
+
+    // ── Theme helpers for dynamic content ──
+    function t(lightVal, darkVal) { return isDarkMode ? darkVal : lightVal; }
+
+    // ── Mail SVG ──
+    const mailSvg = `<svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>`;
+
+    // ── Render team members ──
+    function renderTeam(members) {
+      const container = document.getElementById('team-container');
+      container.innerHTML = '';
+
+      const textColor = t('text-white', 'text-black');
+      const accentColor = t('text-gray-100', 'text-gray-800');
+      const headingColor = 'text-gold';
+      const borderColor = t('border-white/40', 'border-black');
+
+      members.forEach((member, index) => {
+        const isEven = index % 2 === 0;
+        const profileUrl = `team-member.html?slug=${encodeURIComponent(member.slug)}`;
+
+        const card = document.createElement('div');
+        card.className = `flex flex-col lg:grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 xl:gap-16 items-center py-8 sm:py-10 lg:py-20 border-b border-gray-800/80 last:border-b-0`;
+
+        card.innerHTML = `
+          <!-- Text Content -->
+          <div class="${isEven ? 'lg:order-1' : 'lg:order-2'} text-center lg:text-left w-full">
+            <a href="${profileUrl}" class="block group">
+              <h2 class="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold ${headingColor} group-hover:${accentColor} transition-colors duration-300">
+                ${escHtml(member.name)}
+              </h2>
+              <p class="mt-1 sm:mt-2 text-base sm:text-lg lg:text-xl xl:text-2xl ${accentColor} font-medium">
+                ${escHtml(member.title || '')}
+              </p>
+              <div class="mt-4 sm:mt-5 lg:mt-6 text-sm sm:text-base lg:text-lg ${textColor} opacity-90 leading-relaxed">
+                <p>${escHtml(member.bio || '')}</p>
+              </div>
+              <div class="mt-4 sm:mt-6 lg:mt-8 flex items-center gap-2 sm:gap-3 ${textColor} opacity-80 justify-center lg:justify-start">
+                ${mailSvg}
+                <span class="text-xs sm:text-sm lg:text-base break-all">${escHtml(member.email || '')}</span>
+              </div>
+              <div class="mt-6 sm:mt-7 lg:mt-8 flex justify-center lg:justify-start">
+                <span class="inline-block px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 rounded-full text-xs sm:text-sm font-medium border ${borderColor} ${textColor} group-hover:bg-white group-hover:text-black transition-all duration-300">
+                  View Full Profile →
+                </span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Image -->
+          <div class="${isEven ? 'lg:order-2' : 'lg:order-1'} w-full max-w-md lg:max-w-none">
+            <a href="${profileUrl}" class="block card-hover">
+              <div class="card-frame relative aspect-[4/5] rounded-xl sm:rounded-2xl overflow-hidden border ${borderColor} shadow-lg sm:shadow-xl">
+                ${member.image
+                  ? `<img src="${escHtml(member.image)}" alt="${escHtml(member.name)}" class="card-image absolute inset-0 w-full h-full object-cover" />`
+                  : `<div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-700 to-gray-900">
+                       <p class="text-gray-400 text-sm sm:text-base lg:text-lg">Photo coming soon</p>
+                     </div>`
+                }
+              </div>
+            </a>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function escHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    // ── Fetch data ──
+    async function init() {
+      try {
+        const { data, error } = await supabase
+          .from('team_members')
+          .select('slug,name,title,email,bio,image,sort_order')
+          .order('sort_order', { ascending: true });
+
+        if (error) throw error;
+
+        window._teamData = data || [];
+
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('team-container').classList.remove('hidden');
+        renderTeam(window._teamData);
+      } catch (err) {
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+        document.getElementById('error-message').textContent = 'Error: ' + (err.message || 'Failed to fetch team members');
+      }
+    }
+
+    init();
+    applyTheme();
+  </script>
+</body>
+</html>
