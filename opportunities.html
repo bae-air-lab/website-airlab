@@ -62,7 +62,7 @@
     function render(){
       const c=document.getElementById('content');
       const tc=isDarkMode?'text-black':'text-white',ac=isDarkMode?'text-gray-800':'text-gray-100',bc=isDarkMode?'border-black':'border-white/40';
-      const openOpps=allOpps.filter(o=>(o.active||'open')==='open');
+      const openOpps = allOpps.filter(o => o.active === 'true' || o.active === true);
 
       if(!openOpps.length){
         c.innerHTML=`
