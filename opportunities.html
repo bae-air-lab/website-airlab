@@ -62,7 +62,7 @@
     function render(){
       const c=document.getElementById('content');
       const tc=isDarkMode?'text-black':'text-white',ac=isDarkMode?'text-gray-800':'text-gray-100',bc=isDarkMode?'border-black':'border-white/40';
-      const openOpps=allOpps.filter(o=>(o.status||'open')==='open');
+      const openOpps=allOpps.filter(o=>(o.active||'open')==='open');
 
       if(!openOpps.length){
         c.innerHTML=`
@@ -85,7 +85,7 @@
 
         let badges='';
         if(o.featured) badges+=`<span class="px-3 py-1 border ${bc} rounded-full text-sm whitespace-nowrap ${tc}">Featured</span>`;
-        if(o.category) badges+=`<span class="px-3 py-1 border ${bc} rounded-full text-sm whitespace-nowrap ${tc}">${esc(o.category)}</span>`;
+        if(o.type) badges+=`<span class="px-3 py-1 border ${bc} rounded-full text-sm whitespace-nowrap ${tc}">${esc(o.type)}</span>`;
 
         return `<div class="group border-l-4 ${bc} pl-6 py-6 hover:border-blue-500 transition-colors duration-300">
           <div class="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-4"><h3 class="text-xl font-semibold ${tc} flex-1">${esc(o.title)}</h3><div class="flex items-center gap-2">${badges}</div></div>
@@ -95,7 +95,7 @@
             ${o.requirements?`<div><p class="text-sm font-medium ${tc} mb-1">Requirements</p><p class="text-sm ${tc} opacity-80">${esc(o.requirements)}</p></div>`:''}
           </div>
           <div class="flex flex-wrap items-center gap-4">
-            ${o.apply_link?`<a href="${esc(o.apply_link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm ${ac} hover:underline transition-colors">${sv.extLink} Apply / Details</a>`:''}
+            ${o.link?`<a href="${esc(o.link)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm ${ac} hover:underline transition-colors">${sv.extLink} Apply / Details</a>`:''}
             <div class="inline-flex items-center gap-2 text-sm ${tc} opacity-80">${sv.mailSm}<a href="mailto:${esc(email)}" class="hover:underline">${esc(email)}</a></div>
           </div>
         </div>`;
@@ -109,8 +109,8 @@
 
     async function init(){
       try{
-        const{data,error}=await supabase.from('opportunities').select('id,title,category,location,description,requirements,apply_link,contact_email,status,featured,posted_at,deadline,created_at')
-          .order('status',{ascending:true}).order('featured',{ascending:false}).order('posted_at',{ascending:false}).order('created_at',{ascending:false});
+        const{data,error}=await supabase.from('opportunities').select('id,title,type,location,description,requirements,link,contact_email,active,featured,posted_at,deadline,created_at')
+          .order('active',{ascending:true}).order('featured',{ascending:false}).order('posted_at',{ascending:false}).order('created_at',{ascending:false});
         if(error)throw error;
         allOpps=(data||[]).map(o=>({...o,contact_email:o.contact_email||'bae-air-lab@ncsu.edu'}));
         document.getElementById('loading-state').classList.add('hidden');
